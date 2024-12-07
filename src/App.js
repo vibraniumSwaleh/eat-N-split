@@ -54,14 +54,12 @@ function Friend({ friend }) {
       )}
       {friend.balance > 0 && (
         <p className='green'>
-          You owe {friend.name} {Math.abs(friend.balance)}€
+          {friend.name} owe you {Math.abs(friend.balance)}€
         </p>
       )}
-      {friend.balance === 0 && (
-        <p>
-          You owe {friend.name} {Math.abs(friend.balance)}€
-        </p>
-      )}
+      {friend.balance === 0 && <p>You and {friend.name} are even</p>}
+
+      <button className='button'>Select</button>
     </li>
   );
 }
