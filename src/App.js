@@ -93,14 +93,17 @@ function FormAddFriend({ frienList, onAddFriend }) {
   function handleAddFriend(e) {
     e.preventDefault();
 
-    const friend = {
-      id: Date.now(),
+    const id = crypto.randomUUID();
+    const newFriend = {
+      id,
       name: name,
-      image: image,
+      image: `${image}?=${id}`,
       balance: 0,
     };
+    onAddFriend((frienList) => [...frienList, newFriend]);
 
-    onAddFriend((frienList) => [...frienList, friend]);
+    setName('');
+    setImage('https://i.pravatar.cc/48');
   }
 
   return (
