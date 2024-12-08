@@ -87,16 +87,16 @@ function Button({ children, onClick }) {
 }
 
 function FormAddFriend({ frienList, onAddFriend }) {
-  const [friendName, setFriendName] = useState('');
-  const [imgUrl, setImgUrl] = useState('');
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('https://i.pravatar.cc/48');
 
   function handleAddFriend(e) {
     e.preventDefault();
 
     const friend = {
       id: Date.now(),
-      name: friendName,
-      image: imgUrl,
+      name: name,
+      image: image,
       balance: 0,
     };
 
@@ -108,15 +108,15 @@ function FormAddFriend({ frienList, onAddFriend }) {
       <label>🧑🏼‍🤝‍👨 Friend name</label>
       <input
         type='text'
-        value={friendName}
-        onChange={(e) => setFriendName(e.target.value)}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
 
       <label>📸 Image URL</label>
       <input
         type='text'
-        value={imgUrl}
-        onChange={(e) => setImgUrl(e.target.value)}
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
       />
 
       <Button onClick={handleAddFriend}>Add</Button>
