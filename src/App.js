@@ -36,11 +36,10 @@ function App() {
   }
 
   function handleSelection(friend) {
-    setSelectedFriend(friend);
-  }
-
-  function handleCancel() {
-    setSelectedFriend(null);
+    setSelectedFriend((selectedFriend) =>
+      selectedFriend?.id === friend.id ? null : friend,
+    );
+    setShowAddFriend(false);
   }
 
   return (
@@ -50,7 +49,6 @@ function App() {
           friends={friends}
           onSelection={handleSelection}
           selectedFriend={selectedFriend}
-          onCancel={handleCancel}
         />
         {showAddFriend && <FormAddFriend onAddFriend={handleAddFriend} />}
         <Button onClick={handleShowAddFriend}>
@@ -62,7 +60,7 @@ function App() {
   );
 }
 
-function FriendList({ friends, onSelection, selectedFriend, onCancel }) {
+function FriendList({ friends, onSelection, selectedFriend }) {
   return (
     <ul>
       {friends.map((friend) => (
@@ -71,16 +69,17 @@ function FriendList({ friends, onSelection, selectedFriend, onCancel }) {
           key={friend.id}
           onSelection={onSelection}
           selectedFriend={selectedFriend}
-          onCancel={onCancel}
         />
       ))}
     </ul>
   );
 }
 
-function Friend({ friend, onSelection, selectedFriend, onCancel }) {
+function Friend({ friend, onSelection, selectedFriend }) {
+  const isSelected = selectedFriend === friend;
+
   return (
-    <li>
+    <li className={isSelected ? 'selected' : ''}>
       <img src={friend.image} alt={friend.name} />
       <h3>{friend.name}</h3>
 
@@ -96,13 +95,9 @@ function Friend({ friend, onSelection, selectedFriend, onCancel }) {
       )}
       {friend.balance === 0 && <p>You and {friend.name} are even</p>}
 
-      {selectedFriend === friend ? (
-        <Button onClick={onCancel}>Cancel</Button>
-      ) : (
-        <Button friendId={friend.id} onClick={() => onSelection(friend)}>
-          Select
-        </Button>
-      )}
+      <Button friendId={friend.id} onClick={() => onSelection(friend)}>
+        {isSelected ? 'Cancel' : 'Select'}
+      </Button>
     </li>
   );
 }
