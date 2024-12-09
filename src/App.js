@@ -39,10 +39,19 @@ function App() {
     setSelectedFriend(friend);
   }
 
+  function handleCancel() {
+    setSelectedFriend(null);
+  }
+
   return (
     <div className='app'>
       <div className='sidebar'>
-        <FriendList friends={friends} onSelection={handleSelection} />
+        <FriendList
+          friends={friends}
+          onSelection={handleSelection}
+          selectedFriend={selectedFriend}
+          onCancel={handleCancel}
+        />
         {showAddFriend && <FormAddFriend onAddFriend={handleAddFriend} />}
         <Button onClick={handleShowAddFriend}>
           {showAddFriend ? 'Close' : 'Add friend'}
@@ -53,17 +62,23 @@ function App() {
   );
 }
 
-function FriendList({ friends, onSelection }) {
+function FriendList({ friends, onSelection, selectedFriend, onCancel }) {
   return (
     <ul>
       {friends.map((friend) => (
-        <Friend friend={friend} key={friend.id} onSelection={onSelection} />
+        <Friend
+          friend={friend}
+          key={friend.id}
+          onSelection={onSelection}
+          selectedFriend={selectedFriend}
+          onCancel={onCancel}
+        />
       ))}
     </ul>
   );
 }
 
-function Friend({ friend, onSelection }) {
+function Friend({ friend, onSelection, selectedFriend, onCancel }) {
   return (
     <li>
       <img src={friend.image} alt={friend.name} />
@@ -81,9 +96,13 @@ function Friend({ friend, onSelection }) {
       )}
       {friend.balance === 0 && <p>You and {friend.name} are even</p>}
 
-      <Button friendId={friend.id} onClick={() => onSelection(friend)}>
-        Select
-      </Button>
+      {selectedFriend === friend ? (
+        <Button onClick={onCancel}>Cancel</Button>
+      ) : (
+        <Button friendId={friend.id} onClick={() => onSelection(friend)}>
+          Select
+        </Button>
+      )}
     </li>
   );
 }
@@ -143,7 +162,7 @@ function FormAddFriend({ onAddFriend }) {
 function FormSplitBill({ selectedFriend }) {
   return (
     <form className='form-split-bill'>
-      <h2>Splitt Bill</h2>
+      <h2>Splitt a bill with {selectedFriend.name}</h2>
 
       <label>💰 Bill value</label>
       <input type='text' />
@@ -151,7 +170,7 @@ function FormSplitBill({ selectedFriend }) {
       <label>🕴️ Your expense</label>
       <input type='text' />
 
-      <label>🧑🏼‍🤝‍👨 X's expense</label>
+      <label>🧑🏼‍🤝‍👨 {selectedFriend?.name}'s expense</label>
       <input type='text' disabled value={Math.abs(selectedFriend?.balance)} />
 
       <label>🤑 Who is paying the bill</label>
